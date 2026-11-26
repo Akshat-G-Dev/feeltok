@@ -1,6 +1,6 @@
 <?php
 // FT-03 Registration: a new user creates an account and is logged in.
-session_start();
+require __DIR__ . '/includes/auth.php';
 require __DIR__ . '/includes/db.php';
 require __DIR__ . '/includes/validation.php';
 

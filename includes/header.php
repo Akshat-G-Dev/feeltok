@@ -20,6 +20,9 @@ $title = $title ?? 'FeelTok';
             <img src="<?= BASE_URL ?>/assets/img/icon.png" alt="" width="36" height="36">
             <span class="fw-bold">FeelTok</span>
         </a>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <a class="btn btn-outline-dark btn-sm" href="<?= BASE_URL ?>/logout.php">Log out</a>
+        <?php endif; ?>
     </div>
 </nav>
 <main class="container py-4">

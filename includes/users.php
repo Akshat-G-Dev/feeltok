@@ -20,3 +20,13 @@ function create_user(mysqli $db, string $name, string $email, string $password, 
     $stmt->execute();
     return $db->insert_id;
 }
+
+// FT-04 returns the user when the email and the password are right, otherwise null
+function check_login(mysqli $db, string $email, string $password): ?array
+{
+    $stmt = $db->prepare('SELECT id, name, password, role FROM users WHERE email = ?');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    return $user && password_verify($password, $user['password']) ? $user : null;
+}
