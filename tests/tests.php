@@ -60,6 +60,22 @@ $db->rollback();
 check('FT-03 A new user is saved with a hashed password and the role user',
     $row && $row['role'] === 'user' && password_verify('Test1234', $row['password']));
 
+// FT-04 log in: the check of the email and the password
+check('FT-04 The right email and password are accepted', (check_login($db, 'sara@feeltok.test', 'Test@1234')['role'] ?? '') === 'user');
+check('FT-04 A wrong password is refused', check_login($db, 'sara@feeltok.test', 'Wrong1234') === null);
+check('FT-04 An unknown email is refused', check_login($db, 'nobody@feeltok.test', 'Test@1234') === null);
+
+// FT-09 access control: the helpers in auth.php (the real session is kept as it is)
+require_once __DIR__ . '/../includes/auth.php';
+$saved_session = $_SESSION;
+$_SESSION = [];
+check('FT-09 A visitor who is not logged in is not let in', !is_logged_in());
+$_SESSION = ['user_id' => 2, 'role' => 'admin'];
+check('FT-09 An admin has the admin role', has_role('admin', 'super_admin'));
+$_SESSION = ['user_id' => 3, 'role' => 'user'];
+check('FT-09 A user does not have the admin role', !has_role('admin', 'super_admin'));
+$_SESSION = $saved_session;
+
 $passed = count(array_filter($results, fn($r) => $r[1]));
 $total = count($results);
 

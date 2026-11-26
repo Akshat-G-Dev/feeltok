@@ -38,8 +38,10 @@ Every password is `Test@1234`.
 feeltok/
 ├── index.php            welcome page
 ├── register.php         create an account
+├── login.php            log in
+├── logout.php           log out
 ├── home.php             home page after log in
-├── includes/            config.php, db.php, header.php, footer.php, users.php, validation.php
+├── includes/            config.php, db.php, header.php, footer.php, users.php, validation.php, auth.php
 ├── assets/              css, images, Bootstrap
 ├── database/feeltok.sql tables and test accounts
 ├── tests/tests.php      automatic checks

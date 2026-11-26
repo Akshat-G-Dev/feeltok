@@ -1,10 +1,7 @@
 <?php
 // Home page for a logged-in user. A simple greeting for now; FT-05 builds the full home page.
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit;
-}
+require __DIR__ . '/includes/auth.php';
+require_login();
 
 $title = 'Home';
 require __DIR__ . '/includes/header.php';
