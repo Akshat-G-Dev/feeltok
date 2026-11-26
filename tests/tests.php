@@ -52,7 +52,7 @@ $errors = registration_errors($db, 'Test User', 'sara@feeltok.test', 'Test1234',
 check('FT-03 An email that is already registered is refused', ($errors['email'] ?? '') === 'This email is already registered');
 $errors = registration_errors($db, 'Test User', 'test.user@feeltok.test', 'abcdefgh', '');
 check('FT-03 A password without a number is refused', isset($errors['password']));
-check('FT-03 Correct details pass every check', registration_errors($db, 'Test User', 'test.user@feeltok.test', 'Test1234', '') === []);
+check('FT-03 Correct details pass every check', registration_errors($db, 'Test User', 'free.' . time() . '@feeltok.test', 'Test1234', '') === []);
 $db->begin_transaction();
 $new_id = create_user($db, 'Test User', 'check.' . time() . '@feeltok.test', 'Test1234', '');
 $row = $db->query("SELECT password, role FROM users WHERE id = $new_id")->fetch_assoc();
