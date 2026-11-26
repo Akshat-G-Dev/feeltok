@@ -21,6 +21,38 @@ body {
     min-height: 44px;
 }
 
-.start-logo {
-    max-width: 220px;
+/* FT-02 welcome page */
+.welcome {
+    max-width: 640px;
+}
+
+.logo-mark {
+    width: 160px;
+}
+
+.tagline {
+    font-size: 1.15rem;
+    color: #555;
+}
+
+.value-card {
+    background: #fff;
+    border-left: 6px solid;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.value-love { border-color: var(--love); }
+.value-gratitude { border-color: var(--gratitude); }
+.value-apology { border-color: var(--apology); }
+.value-appreciation { border-color: var(--appreciation); }
+.value-mindfulness { border-color: var(--mindfulness); }
+.value-thank-you { border-color: var(--thank-you); }
+
+@media (max-width: 575.98px) {
+    .logo-mark {
+        width: 120px;
+    }
 }
