@@ -1,0 +1,26 @@
+/* FeelTok styles on top of Bootstrap 5 */
+
+:root {
+    --love: #E0457B;
+    --gratitude: #F2A20D;
+    --apology: #6A4FD3;
+    --appreciation: #22A06B;
+    --mindfulness: #2D7FD6;
+    --thank-you: #EE6A2B;
+}
+
+/* easy to read for older users (NFR-02) */
+body {
+    font-size: 1rem;
+    background: #f7f7f7;
+}
+
+.btn,
+.form-control,
+.form-select {
+    min-height: 44px;
+}
+
+.start-logo {
+    max-width: 220px;
+}
