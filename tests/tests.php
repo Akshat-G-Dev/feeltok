@@ -44,6 +44,22 @@ check('FT-02 The welcome page has the Create account and Log in buttons',
     && str_contains($page, 'href="login.php"') && str_contains($page, 'Log in'));
 check('FT-02 The page is set to fit the phone screen width', str_contains($page, 'width=device-width'));
 
+// FT-03 registration: the checks and the saving of a new user
+require_once __DIR__ . '/../includes/validation.php';
+$errors = registration_errors($db, 'Test User', 'test.user.feeltok.test', 'Test1234', '');
+check('FT-03 An email without "@" is refused', ($errors['email'] ?? '') === 'Please enter a valid email');
+$errors = registration_errors($db, 'Test User', 'sara@feeltok.test', 'Test1234', '');
+check('FT-03 An email that is already registered is refused', ($errors['email'] ?? '') === 'This email is already registered');
+$errors = registration_errors($db, 'Test User', 'test.user@feeltok.test', 'abcdefgh', '');
+check('FT-03 A password without a number is refused', isset($errors['password']));
+check('FT-03 Correct details pass every check', registration_errors($db, 'Test User', 'test.user@feeltok.test', 'Test1234', '') === []);
+$db->begin_transaction();
+$new_id = create_user($db, 'Test User', 'check.' . time() . '@feeltok.test', 'Test1234', '');
+$row = $db->query("SELECT password, role FROM users WHERE id = $new_id")->fetch_assoc();
+$db->rollback();
+check('FT-03 A new user is saved with a hashed password and the role user',
+    $row && $row['role'] === 'user' && password_verify('Test1234', $row['password']));
+
 $passed = count(array_filter($results, fn($r) => $r[1]));
 $total = count($results);
 

@@ -51,6 +51,11 @@ body {
 .value-mindfulness { border-color: var(--mindfulness); }
 .value-thank-you { border-color: var(--thank-you); }
 
+/* FT-03 registration and other forms */
+.form-page {
+    max-width: 480px;
+}
+
 @media (max-width: 575.98px) {
     .logo-mark {
         width: 120px;
