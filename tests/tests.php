@@ -123,6 +123,21 @@ $page = ob_get_clean();
 $_SESSION = $saved_session;
 check('FT-06 Only the super admin sees Admins in the side menu', $super_menu && !str_contains($page, '/admin/admins.php">Admins</a>'));
 
+// FT-08 admin dashboard, read as an admin sees it
+$saved_session = $_SESSION;
+$_SESSION = ['user_id' => 2, 'name' => 'Admin', 'role' => 'admin'];
+ob_start();
+include __DIR__ . '/../admin/index.php';
+$page = ob_get_clean();
+$_SESSION = $saved_session;
+$users_now = count_rows($db, "SELECT COUNT(*) FROM users WHERE role = 'user'");
+check('FT-08 The dashboard shows the number of registered users', str_contains($page, 'id="user-count">' . $users_now . '<'));
+$newest = newest_users($db, 10);
+$dates = array_column($newest, 'created_at');
+$sorted = $dates;
+rsort($sorted);
+check('FT-08 The dashboard lists at most 10 users, newest first', count($newest) <= 10 && count($newest) === min(10, $users_now) && $dates === $sorted);
+
 // FT-09 access control: the helpers in auth.php (the real session is kept as it is)
 $saved_session = $_SESSION;
 $_SESSION = [];

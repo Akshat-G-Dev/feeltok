@@ -38,3 +38,20 @@ function list_admins(mysqli $db): array
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
+
+// FT-08 the number of registered users (role user)
+function count_users(mysqli $db): int
+{
+    $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE role = 'user'");
+    $stmt->execute();
+    return (int) $stmt->get_result()->fetch_row()[0];
+}
+
+// FT-08 the newest users (role user), newest first
+function newest_users(mysqli $db, int $limit = 10): array
+{
+    $stmt = $db->prepare("SELECT name, email, created_at FROM users WHERE role = 'user' ORDER BY created_at DESC, id DESC LIMIT ?");
+    $stmt->bind_param('i', $limit);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
