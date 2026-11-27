@@ -88,6 +88,19 @@ check('FT-05 With no messages the home page invites the user to share the first 
 check('FT-05 The menu has Home and Log out and folds under a button on a phone',
     str_contains($page, 'navbar-toggler') && str_contains($page, '/home.php">Home</a>') && str_contains($page, '/logout.php">Log out</a>'));
 
+// FT-06 admin panel: the SB Admin layout, read as an admin sees it
+check('FT-06 SB Admin is stored in the project with its MIT licence',
+    is_file(__DIR__ . '/../assets/vendor/sb-admin/styles.css') && is_file(__DIR__ . '/../assets/vendor/sb-admin/scripts.js')
+    && str_contains((string) @file_get_contents(__DIR__ . '/../assets/vendor/sb-admin/LICENSE'), 'MIT'));
+$saved_session = $_SESSION;
+$_SESSION = ['user_id' => 2, 'name' => 'Admin', 'role' => 'admin'];
+ob_start();
+include __DIR__ . '/../admin/index.php';
+$page = ob_get_clean();
+$_SESSION = $saved_session;
+check('FT-06 The admin panel has the SB Admin top bar and side menu',
+    str_contains($page, 'sb-topnav') && str_contains($page, 'id="layoutSidenav_nav"') && str_contains($page, '/admin/index.php">Dashboard</a>'));
+
 // FT-09 access control: the helpers in auth.php (the real session is kept as it is)
 $saved_session = $_SESSION;
 $_SESSION = [];

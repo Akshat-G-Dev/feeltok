@@ -1,5 +1,7 @@
 <?php
 // FT-09 Access control: starts the session and checks the log in and the role.
+require_once __DIR__ . '/config.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -18,7 +20,7 @@ function has_role(string ...$roles): bool
 function require_login(): void
 {
     if (!is_logged_in()) {
-        header('Location: login.php');
+        header('Location: ' . BASE_URL . '/login.php'); // full path, so it also works from the admin folder
         exit;
     }
 }
@@ -28,7 +30,7 @@ function require_role(string ...$roles): void
 {
     require_login();
     if (!has_role(...$roles)) {
-        header('Location: home.php');
+        header('Location: ' . BASE_URL . '/home.php');
         exit;
     }
 }
