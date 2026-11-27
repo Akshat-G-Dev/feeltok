@@ -76,6 +76,23 @@ $_SESSION = ['user_id' => 3, 'role' => 'user'];
 check('FT-09 A user does not have the admin role', !has_role('admin', 'super_admin'));
 $_SESSION = $saved_session;
 
+// FT-09 safe output and safe queries
+require_once __DIR__ . '/../includes/security.php';
+check('FT-09 "<script>" typed by a user is shown as plain text', e('<script>alert(1)</script>') === '&lt;script&gt;alert(1)&lt;/script&gt;');
+check('FT-09 Quotes typed by a user cannot break out of a form field', e('" onfocus="alert(1)') === '&quot; onfocus=&quot;alert(1)');
+$plain = 0;
+foreach ($db->query('SELECT password FROM users') as $user) {
+    $plain += password_get_info($user['password'])['algoName'] === 'unknown' ? 1 : 0;
+}
+check('FT-09 Every password in the database is stored as a hash', $plain === 0);
+$unsafe = [];
+foreach (array_merge(glob(__DIR__ . '/../*.php'), glob(__DIR__ . '/../includes/*.php')) as $file) {
+    if (preg_match('/->query\(\s*(\$|"[^"]*\$)/', file_get_contents($file))) {
+        $unsafe[] = basename($file);
+    }
+}
+check('FT-09 No page puts a value straight into an SQL query (prepared statements are used)', $unsafe === []);
+
 $passed = count(array_filter($results, fn($r) => $r[1]));
 $total = count($results);
 
@@ -99,7 +116,7 @@ require __DIR__ . '/../includes/header.php';
         <?php foreach ($results as [$name, $ok]): ?>
             <tr>
                 <td class="fw-bold <?= $ok ? 'text-success' : 'text-danger' ?>"><?= $ok ? 'PASS' : 'FAIL' ?></td>
-                <td><?= htmlspecialchars($name) ?></td>
+                <td><?= e($name) ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

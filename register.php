@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Bootstrap classes and message for one field
 function field_state(array $errors, string $field): array
 {
-    return isset($errors[$field]) ? [' is-invalid', '<div class="invalid-feedback">' . $errors[$field] . '</div>'] : ['', ''];
+    return isset($errors[$field]) ? [' is-invalid', '<div class="invalid-feedback">' . e($errors[$field]) . '</div>'] : ['', ''];
 }
 
 $title = 'Create account';
@@ -42,13 +42,13 @@ require __DIR__ . '/includes/header.php';
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" id="name" name="name" class="form-control<?= $nameClass ?>" maxlength="30"
-                   value="<?= htmlspecialchars($name) ?>" required>
+                   value="<?= e($name) ?>" required>
             <?= $nameError ?>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" id="email" name="email" class="form-control<?= $emailClass ?>"
-                   value="<?= htmlspecialchars($email) ?>" required>
+                   value="<?= e($email) ?>" required>
             <?= $emailError ?>
         </div>
         <div class="mb-3">
@@ -59,7 +59,7 @@ require __DIR__ . '/includes/header.php';
         </div>
         <div class="mb-4">
             <label for="story" class="form-label">Your story (optional)</label>
-            <textarea id="story" name="story" class="form-control<?= $storyClass ?>" rows="3" maxlength="300"><?= htmlspecialchars($story) ?></textarea>
+            <textarea id="story" name="story" class="form-control<?= $storyClass ?>" rows="3" maxlength="300"><?= e($story) ?></textarea>
             <?= $storyError ?>
         </div>
         <div class="d-grid">
