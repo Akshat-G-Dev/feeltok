@@ -28,10 +28,14 @@ $hash = $db->query("SELECT password FROM users WHERE email = 'sara@feeltok.test'
 check('FT-01 Test passwords are stored as hashes', $hash !== 'Test@1234' && password_verify('Test@1234', $hash));
 check('FT-01 The shared header and footer exist', is_file(__DIR__ . '/../includes/header.php') && is_file(__DIR__ . '/../includes/footer.php'));
 
-// FT-02 welcome page: read the HTML that index.php sends to the browser
+// FT-02 welcome page: read the HTML that index.php sends to a visitor (the real session is kept as it is)
+require_once __DIR__ . '/../includes/auth.php';
+$saved_session = $_SESSION;
+$_SESSION = [];
 ob_start();
 include __DIR__ . '/../index.php';
 $page = ob_get_clean();
+$_SESSION = $saved_session;
 check('FT-02 The welcome page shows the logo', str_contains($page, 'alt="FeelTok logo"') && is_file(__DIR__ . '/../assets/img/logo-mark.png'));
 check('FT-02 The welcome page shows the tagline', str_contains($page, 'Feel the need. Knead the feel.'));
 $all_values = true;
@@ -65,8 +69,26 @@ check('FT-04 The right email and password are accepted', (check_login($db, 'sara
 check('FT-04 A wrong password is refused', check_login($db, 'sara@feeltok.test', 'Wrong1234') === null);
 check('FT-04 An unknown email is refused', check_login($db, 'nobody@feeltok.test', 'Test@1234') === null);
 
+// FT-05 home page: read the HTML that home.php sends to Sara after log in
+$saved_session = $_SESSION;
+$_SESSION = ['user_id' => 3, 'name' => 'Sara', 'role' => 'user'];
+ob_start();
+include __DIR__ . '/../home.php';
+$page = ob_get_clean();
+$_SESSION = $saved_session;
+check('FT-05 The home page greets the user by name', str_contains($page, 'Hello, Sara'));
+$all_values = true;
+foreach (['Love', 'Gratitude', 'Apology', 'Appreciation', 'Mindfulness', 'Thank you'] as $value) {
+    $all_values = $all_values && str_contains($page, ">$value<");
+}
+check('FT-05 The home page shows the six values', $all_values);
+$no_messages = count_rows($db, "SELECT COUNT(*) FROM posts WHERE status = 'active'") === 0;
+check('FT-05 With no messages the home page invites the user to share the first one',
+    !$no_messages || str_contains($page, 'No messages yet - share the first Hi Six!'));
+check('FT-05 The menu has Home and Log out and folds under a button on a phone',
+    str_contains($page, 'navbar-toggler') && str_contains($page, '/home.php">Home</a>') && str_contains($page, '/logout.php">Log out</a>'));
+
 // FT-09 access control: the helpers in auth.php (the real session is kept as it is)
-require_once __DIR__ . '/../includes/auth.php';
 $saved_session = $_SESSION;
 $_SESSION = [];
 check('FT-09 A visitor who is not logged in is not let in', !is_logged_in());
