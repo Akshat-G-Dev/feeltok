@@ -22,7 +22,7 @@ require __DIR__ . '/includes/header.php';
     <div class="row g-2 mb-4">
         <?php foreach ($values as $key => $name): ?>
             <div class="col-6 col-md-4">
-                <div class="value-card value-<?= $key ?>"><?= $name ?></div>
+                <div class="value-card value-<?= $key ?>"><?= e($name) ?></div>
             </div>
         <?php endforeach; ?>
     </div>

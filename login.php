@@ -31,12 +31,12 @@ require __DIR__ . '/includes/header.php';
 <div class="form-page mx-auto">
     <h1 class="h3 mb-3">Log in</h1>
     <?php if ($error): ?>
-        <div class="alert alert-danger" role="alert"><?= $error ?></div>
+        <div class="alert alert-danger" role="alert"><?= e($error) ?></div>
     <?php endif; ?>
     <form method="post" novalidate>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" name="email" class="form-control" value="<?= htmlspecialchars($email) ?>" required>
+            <input type="email" id="email" name="email" class="form-control" value="<?= e($email) ?>" required>
         </div>
         <div class="mb-4">
             <label for="password" class="form-label">Password</label>

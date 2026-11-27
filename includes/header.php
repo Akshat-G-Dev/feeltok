@@ -1,6 +1,7 @@
 <?php
 // Shared top of every page. Set $title before including this file.
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/security.php';
 $title = $title ?? 'FeelTok';
 ?>
 <!DOCTYPE html>
@@ -8,7 +9,7 @@ $title = $title ?? 'FeelTok';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= htmlspecialchars($title) ?> - FeelTok</title>
+    <title><?= e($title) ?> - FeelTok</title>
     <link rel="icon" href="<?= BASE_URL ?>/assets/img/icon.png">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
