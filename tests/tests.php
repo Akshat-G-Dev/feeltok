@@ -101,6 +101,28 @@ $_SESSION = $saved_session;
 check('FT-06 The admin panel has the SB Admin top bar and side menu',
     str_contains($page, 'sb-topnav') && str_contains($page, 'id="layoutSidenav_nav"') && str_contains($page, '/admin/index.php">Dashboard</a>'));
 
+// FT-06 the super admin adds an admin
+$db->begin_transaction();
+$admin_id = create_user($db, 'Check Admin', 'check.admin.' . time() . '@feeltok.test', 'Admin1234', '', 'admin');
+$row = $db->query("SELECT password, role FROM users WHERE id = $admin_id")->fetch_assoc();
+$db->rollback();
+check('FT-06 The super admin can add an admin (role admin, hashed password)',
+    $row && $row['role'] === 'admin' && password_verify('Admin1234', $row['password']));
+$saved_session = $_SESSION;
+$_SESSION = ['user_id' => 1, 'name' => 'Super Admin', 'role' => 'super_admin'];
+ob_start();
+include __DIR__ . '/../admin/admins.php';
+$page = ob_get_clean();
+check('FT-06 The Admins page lists the admins and has the Add admin form',
+    str_contains($page, 'superadmin@feeltok.test') && str_contains($page, 'admin@feeltok.test') && str_contains($page, '>Add admin</button>'));
+$super_menu = str_contains($page, '/admin/admins.php">Admins</a>');
+$_SESSION = ['user_id' => 2, 'name' => 'Admin', 'role' => 'admin'];
+ob_start();
+include __DIR__ . '/../admin/index.php';
+$page = ob_get_clean();
+$_SESSION = $saved_session;
+check('FT-06 Only the super admin sees Admins in the side menu', $super_menu && !str_contains($page, '/admin/admins.php">Admins</a>'));
+
 // FT-09 access control: the helpers in auth.php (the real session is kept as it is)
 $saved_session = $_SESSION;
 $_SESSION = [];
