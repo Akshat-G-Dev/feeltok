@@ -25,12 +25,24 @@ function require_login(): void
     }
 }
 
-// sends a user without one of these roles back to his home page
+// FT-07 the first page of each role: the admin dashboard for admins and the super admin, the home page for users
+function role_home(): string
+{
+    return has_role('admin', 'super_admin') ? BASE_URL . '/admin/index.php' : BASE_URL . '/home.php';
+}
+
+// sends a user without one of these roles back to the first page of his own role
 function require_role(string ...$roles): void
 {
     require_login();
     if (!has_role(...$roles)) {
-        header('Location: ' . BASE_URL . '/home.php');
+        header('Location: ' . role_home());
         exit;
     }
+}
+
+// FT-07 the pages of the app are for users; an admin is sent to the admin dashboard
+function require_user(): void
+{
+    require_role('user');
 }
