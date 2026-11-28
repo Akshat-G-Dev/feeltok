@@ -55,3 +55,11 @@ function newest_users(mysqli $db, int $limit = 10): array
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
+
+// FT-08 every account with its role and join date, newest first
+function list_users(mysqli $db): array
+{
+    $stmt = $db->prepare('SELECT name, email, role, created_at FROM users ORDER BY created_at DESC, id DESC');
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}

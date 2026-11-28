@@ -34,6 +34,7 @@ $role_name = ($_SESSION['role'] ?? '') === 'super_admin' ? 'Super admin' : 'Admi
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">Admin</div>
                     <a class="nav-link" href="<?= BASE_URL ?>/admin/index.php">Dashboard</a>
+                    <a class="nav-link" href="<?= BASE_URL ?>/admin/users.php">Users</a>
                     <?php if (($_SESSION['role'] ?? '') === 'super_admin'): ?>
                         <a class="nav-link" href="<?= BASE_URL ?>/admin/admins.php">Admins</a>
                     <?php endif; ?>

@@ -152,6 +152,18 @@ $newest = newest_users($db, 10);
 $dates = array_column($newest, 'created_at');
 $sorted = $dates;
 rsort($sorted);
+$saved_session = $_SESSION;
+$_SESSION = ['user_id' => 2, 'name' => 'Admin', 'role' => 'admin'];
+ob_start();
+include __DIR__ . '/../admin/users.php';
+$page = ob_get_clean();
+$_SESSION = $saved_session;
+$all_listed = true;
+foreach ($db->query('SELECT email FROM users') as $account) {
+    $all_listed = $all_listed && str_contains($page, '>' . $account['email'] . '<');
+}
+check('FT-08 The Users page lists every account with its name, email, role and join date',
+    $all_listed && str_contains($page, '<th>Role</th>') && str_contains($page, '<th>Joined</th>'));
 check('FT-08 The dashboard lists at most 10 users, newest first', count($newest) <= 10 && count($newest) === min(10, $users_now) && $dates === $sorted);
 
 // FT-09 access control: the helpers in auth.php (the real session is kept as it is)
