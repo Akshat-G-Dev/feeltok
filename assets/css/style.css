@@ -56,6 +56,19 @@ body {
     max-width: 720px;
 }
 
+/* FT-33 friends screen: a grey circle with the first letter */
+.friend-initial {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #6c757d;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
 /* FT-03 registration and other forms */
 .form-page {
     max-width: 480px;

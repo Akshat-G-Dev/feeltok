@@ -30,6 +30,7 @@ $title = $title ?? 'FeelTok';
             <div class="collapse navbar-collapse" id="main-menu">
                 <ul class="navbar-nav ms-auto align-items-md-center gap-2 py-2 py-md-0">
                     <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/home.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/friends.php">Friends</a></li>
                     <li class="nav-item"><a class="btn btn-outline-dark btn-sm d-inline-flex align-items-center" href="<?= BASE_URL ?>/logout.php">Log out</a></li>
                 </ul>
             </div>

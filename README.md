@@ -41,6 +41,7 @@ feeltok/
 ├── login.php            log in
 ├── logout.php           log out
 ├── home.php             home page after log in
+├── friends.php          friends screen (hard-coded in release v1.0)
 ├── admin/               admin panel (SB Admin layout)
 ├── includes/            config.php, db.php, header.php, footer.php, admin_header.php, admin_footer.php, values.php, users.php, validation.php, auth.php, security.php
 ├── assets/              css, images, Bootstrap, SB Admin (with its MIT licence)
