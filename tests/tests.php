@@ -88,6 +88,20 @@ check('FT-05 With no messages the home page invites the user to share the first 
 check('FT-05 The menu has Home and Log out and folds under a button on a phone',
     str_contains($page, 'navbar-toggler') && str_contains($page, '/home.php">Home</a>') && str_contains($page, '/logout.php">Log out</a>'));
 
+// FT-33 friends screen, read as Sara sees it
+$saved_session = $_SESSION;
+$_SESSION = ['user_id' => 3, 'name' => 'Sara', 'role' => 'user'];
+ob_start();
+include __DIR__ . '/../friends.php';
+$page = ob_get_clean();
+$_SESSION = $saved_session;
+$four = true;
+foreach (['Maya', 'Yusuf', 'Hana', 'Karim'] as $friend) {
+    $four = $four && str_contains($page, "<span>$friend</span>");
+}
+check('FT-33 The friends screen shows four friends and says that adding friends comes next', $four && str_contains($page, 'Finding and adding friends comes in the next release.'));
+check('FT-33 The menu of a user has Friends', str_contains($page, '/friends.php">Friends</a>'));
+
 // FT-06 admin panel: the SB Admin layout, read as an admin sees it
 check('FT-06 SB Admin is stored in the project with its MIT licence',
     is_file(__DIR__ . '/../assets/vendor/sb-admin/styles.css') && is_file(__DIR__ . '/../assets/vendor/sb-admin/scripts.js')
