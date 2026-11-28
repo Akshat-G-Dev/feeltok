@@ -1,10 +1,10 @@
 <?php
-// FT-02 Welcome page: the first page a visitor sees. A user who is logged in goes to the home page.
+// FT-02 Welcome page: the first page a visitor sees. Someone who is logged in goes to the first page of his role (FT-07).
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/values.php';
 
 if (is_logged_in()) {
-    header('Location: home.php');
+    header('Location: ' . role_home());
     exit;
 }
 

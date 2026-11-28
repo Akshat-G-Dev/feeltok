@@ -123,6 +123,22 @@ $page = ob_get_clean();
 $_SESSION = $saved_session;
 check('FT-06 Only the super admin sees Admins in the side menu', $super_menu && !str_contains($page, '/admin/admins.php">Admins</a>'));
 
+// FT-07 access by role (the real session is kept as it is)
+$saved_session = $_SESSION;
+$homes = [];
+foreach (['user', 'admin', 'super_admin'] as $role) {
+    $_SESSION = ['user_id' => 3, 'name' => 'Check', 'role' => $role];
+    $homes[$role] = role_home();
+}
+$_SESSION = ['user_id' => 3, 'name' => 'Sara', 'role' => 'user'];
+$user_ok = has_role('user') && !has_role('admin', 'super_admin');
+$_SESSION = ['user_id' => 2, 'name' => 'Admin', 'role' => 'admin'];
+$admin_ok = !has_role('user') && has_role('admin', 'super_admin');
+$_SESSION = $saved_session;
+check('FT-07 After log in a user goes to the home page, an admin and the super admin to the admin dashboard',
+    $homes['user'] === BASE_URL . '/home.php' && $homes['admin'] === BASE_URL . '/admin/index.php' && $homes['super_admin'] === BASE_URL . '/admin/index.php');
+check('FT-07 Only users can open the pages of the app, and only admins the admin pages', $user_ok && $admin_ok);
+
 // FT-08 admin dashboard, read as an admin sees it
 $saved_session = $_SESSION;
 $_SESSION = ['user_id' => 2, 'name' => 'Admin', 'role' => 'admin'];

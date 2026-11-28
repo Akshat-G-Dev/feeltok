@@ -5,7 +5,7 @@ require __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/users.php';
 
 if (is_logged_in()) {
-    header('Location: home.php');
+    header('Location: ' . role_home());
     exit;
 }
 
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['role'] = $user['role'];
-        header('Location: home.php'); // FT-07 will send admins to the admin panel
+        header('Location: ' . role_home()); // FT-07 admins go to the admin dashboard, users to the home page
         exit;
     }
     $error = 'Email or password is not correct';

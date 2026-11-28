@@ -1,7 +1,7 @@
 <?php
 // FT-05 Home page after log in: the greeting, the six values and the messages.
 require_once __DIR__ . '/includes/auth.php';
-require_login();
+require_user(); // FT-07 an admin is sent to the admin dashboard
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/values.php';
 
